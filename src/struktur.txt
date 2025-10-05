@@ -1,0 +1,5 @@
+App.tsx
+favicon.svg
+main.tsx
+struktur.txt
+utils.ts
