@@ -12,8 +12,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
-  "homepage": "https://github.com/varHarrie/varharrie.github.io#readme",
-  "author": "varharrie <varharrie@gmail.com>",
+  "homepage": "https://dagangduit.github.io",
+  "author": "Dagangduit",
   "license": "MIT",
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.0.26",

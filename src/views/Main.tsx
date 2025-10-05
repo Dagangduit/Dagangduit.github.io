@@ -71,8 +71,8 @@ export default function Main() {
   const [darkModeEnabled, setDarkModelEnabled] = useDarkMode();
 
   useEffect(() => {
-    loadThemeStyles('prism-theme', darkModeEnabled ? prismDark : mdLight);
-    loadThemeStyles('markdown-theme', darkModeEnabled ? mdDark : prismLight);
+    loadThemeStyles('prism-theme', darkModeEnabled ? prismDark : prismLight);
+    loadThemeStyles('markdown-theme', darkModeEnabled ? mdDark : mdLight);
   }, [darkModeEnabled]);
 
   const onToggleDarkMode = useCallback(() => {
