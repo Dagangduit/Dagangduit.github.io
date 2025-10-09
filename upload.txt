@@ -1,35 +1,19 @@
-# 1. Cek status dan perubahan apa saja
+Edit file yang mau di upload..
+/src/data/IndicatorProducts.ts
+/src/data/EAProducts.ts
+
+untuk image 
+public/images/indicator/EA
+
+jalankan 
 npm run build
 
-# 2. Add perubahan Anda
 git add .
-git commit -m "update produk [nama produk]"
+git commit -m "update"  
+git push origin gh-pages --force   
 
-# Pull dulu
-git pull origin gh-pages
+jalankan 
+npm run deploy  
 
-# Push lagi
-git push origin gh-pages
-
-#Paksa Push
-git push origin gh-pages --force
-
-# 3. Commit perubahan
-# Hard refresh
-Ctrl + F5
-
-# Atau cache buster
-https://dagangduit.github.io?v=123456789
-
-
-Cara Update
-# 1. Edit produk dulu (manual)
-# 2. Build
+jalankan 
 npm run build
-
-# 3. Git operations
-git add .
-git commit -m "update produk indicator/EA"
-git push origin gh-pages
-
-# 4. Done! Website akan terupdate otomatis
