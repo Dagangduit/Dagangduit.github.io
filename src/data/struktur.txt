@@ -1,3 +1,0 @@
-EAProducts.ts
-IndicatorProducts.ts
-struktur.txt

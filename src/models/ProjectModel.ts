@@ -1,10 +1,14 @@
 import { Repository } from '../services/github';
-import UserModel from './UserModel';
 
 export default class ProjectModel {
   private constructor(
     public id: number,
-    public owner: UserModel,
+    public owner: {
+      id: number;
+      login: string;
+      avatar_url: string;
+      html_url: string;
+    },
     public fullName: string,
     public name: string,
     public htmlUrl: string,
@@ -23,7 +27,7 @@ export default class ProjectModel {
   static from(raw: Repository): ProjectModel {
     return new ProjectModel(
       raw.id,
-      UserModel.from(raw.owner),
+      raw.owner,
       raw.full_name,
       raw.name,
       raw.html_url,

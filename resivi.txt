@@ -1,0 +1,16 @@
+Please scan my entire React + TypeScript project to identify any unused or unreferenced files.  
+Remove all files that are **not being imported, used, or referenced anywhere** in the project, including TypeScript, CSS, and component files.
+
+⚠️ Important rules:
+1. Do **not** delete anything inside the `/public` folder, especially image files.
+2. Keep all configuration files such as `vite.config.ts`, `package.json`, `tsconfig.json`, `.env`, etc.
+3. After cleanup, ensure that all imports in the project remain valid (no broken imports).
+4. If possible, generate a short summary listing which files were removed.
+
+My main directories:
+- `/src/views/`
+- `/src/components/`
+- `/src/data/`
+- `/src/styles/`
+
+The goal is to optimize and clean up unused code safely without affecting the current website functionality.

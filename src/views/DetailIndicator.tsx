@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import tw, { styled } from 'twin.macro';
-import { IndicatorProducts } from '../data/IndicatorProducts';
+import { IndicatorProducts, RentalOption } from '../data/IndicatorProducts';
 import ShapeEffect from '../components/ShapeEffect/ShapeEffect';
 
 const PageWrapper = styled.div`
-  ${tw`relative w-full min-h-screen overflow-hidden py-10 px-8 transition-colors duration-500`}
+  ${tw`relative w-full min-h-screen overflow-hidden py-6 sm:py-10 px-4 sm:px-8 transition-colors duration-500`}
 `;
 
 const Background = tw.div`absolute inset-0 top-0 left-0 w-full h-full [user-select:none] pointer-events-none opacity-50 blur-sm -z-20`;
@@ -14,13 +14,14 @@ const Foreground = tw.div`absolute inset-0 top-0 left-0 w-full h-full [user-sele
 
 const Container = tw.div`max-w-6xl mx-auto relative z-10`;
 
-const Breadcrumb = tw.div`mb-6 text-sm text-gray-600 dark:text-gray-400`;
+const Breadcrumb = tw.div`mb-3 sm:mb-6 text-xs sm:text-sm text-gray-600 dark:text-gray-400`;
 
 const BreadcrumbLink = tw.button`hover:text-blue-500 transition-colors`;
 
-const ContentWrapper = tw.div`grid lg:grid-cols-2 gap-8 mb-8`;
+const ContentWrapper = tw.div`grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-6 lg:mb-8`;
 
-const ImageSection = tw.div`space-y-4`;
+const ImageSection = tw.div`space-y-4`
+
 
 const ImageGallery = styled.div`
   ${tw`relative w-full`}
@@ -45,24 +46,65 @@ const ScrollContainer = styled.div`
   }
 `;
 
+// const MainImageWrapper = styled.div`
+//   ${tw`w-full rounded-xl overflow-hidden mb-4 relative cursor-zoom-in`}
+//   height: 550px;
+//   max-height: 75vh;
+//   background: rgba(255, 255, 255, 0.05);
+//   border: 1px solid rgba(255, 255, 255, 0.1);
+  
+//   @media (max-width: 768px) {
+//     height: 400px;
+//   }
+  
+//   .dark & {
+//     background: rgba(0, 0, 0, 0.1);
+//     border: 1px solid rgba(255, 255, 255, 0.05);
+//   }
+  
+//   &:hover {
+//     transform: scale(1.02);
+//     transition: transform 0.3s ease;
+//     border: 1px solid rgba(59, 130, 246, 0.3);
+//   }
+  
+//   &::after {
+//     content: '🔍';
+//     position: absolute;
+//     top: 10px;
+//     right: 10px;
+//     background: rgba(0, 0, 0, 0.7);
+//     color: white;
+//     padding: 8px;
+//     border-radius: 50%;
+//     opacity: 0;
+//     transition: opacity 0.3s ease;
+//     pointer-events: none;
+//   }
+  
+//   &:hover::after {
+//     opacity: 1;
+//   }
+// `;
+
 const MainImageWrapper = styled.div<{ isActive: boolean }>`
-  ${tw`w-full h-96 rounded-2xl overflow-hidden mb-4 relative cursor-pointer`}
+  ${tw`w-full aspect-[16/10] sm:aspect-[16/9] lg:aspect-[16/10] rounded-2xl overflow-hidden mb-4 relative cursor-pointer`}
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  
+
   .dark & {
     box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
   }
-  
+
   ${({ isActive }) => isActive && `
     transform: rotateY(-15deg) scale(1.02);
   `}
-  
+
   &:hover {
     transform: rotateY(-8deg) scale(1.05);
   }
-  
+
   &::before {
     content: '';
     position: absolute;
@@ -76,13 +118,34 @@ const MainImageWrapper = styled.div<{ isActive: boolean }>`
     z-index: 1;
     pointer-events: none;
   }
-  
+
   &:hover::before {
     opacity: 1;
   }
 `;
+const MainImage = tw.img`w-full h-full object-cover object-center transition-all duration-500`;
 
-const MainImage = tw.img`w-full h-full object-cover transition-all duration-500`;
+// Zoom Modal Components
+const ZoomModal = styled.div<{ isOpen: boolean }>`
+  ${tw`fixed inset-0 z-50 flex items-center justify-center p-4`}
+  background: rgba(0, 0, 0, 0.9);
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
+  transition: all 0.3s ease;
+`;
+
+const ZoomedImage = tw.img`max-w-full max-h-full object-contain rounded-lg`;
+
+const CloseButton = styled.button`
+  ${tw`absolute top-4 right-4 text-white text-2xl hover:text-gray-300 transition-colors`}
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 const ThumbnailImage = styled.div<{ isActive: boolean }>`
   ${tw`min-w-[120px] h-24 rounded-lg overflow-hidden cursor-pointer relative flex-shrink-0`}
@@ -106,38 +169,44 @@ const ThumbnailImage = styled.div<{ isActive: boolean }>`
   }
 `;
 
+
 const ThumbnailImg = tw.img`w-full h-full object-cover`;
 
 const InfoSection = styled.div`
-  ${tw`bg-white dark:bg-gray-900 rounded-2xl p-8 transition-colors duration-300`}
+  ${tw`rounded-2xl p-4 sm:p-6 lg:p-8 transition-colors duration-300`}
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  
+
   .dark & {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
   }
 `;
 
-const Category = tw.span`inline-block text-blue-500 font-semibold uppercase text-xs px-3 py-1 bg-blue-50 dark:bg-blue-900/30 rounded-full mb-4`;
+const Category = tw.span`inline-block text-blue-500 font-semibold uppercase text-xs px-3 py-1 bg-blue-50 dark:bg-blue-900/30 rounded-full mb-3 sm:mb-4`;
 
-const Title = tw.h1`text-4xl font-bold text-gray-800 dark:text-gray-100 mb-4`;
+const Title = tw.h1`text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4 leading-tight`;
 
-const PriceSection = tw.div`flex items-baseline gap-3 mb-6 pb-6 border-b border-gray-200 dark:border-gray-700`;
+const PriceSection = tw.div`flex items-baseline gap-2 sm:gap-3 mb-4 sm:mb-6 pb-4 sm:pb-6 border-b border-gray-200 dark:border-gray-700`;
 
-const Price = tw.div`text-4xl font-bold text-green-600 dark:text-green-400`;
+const Price = tw.div`text-2xl sm:text-3xl lg:text-4xl font-bold text-green-600 dark:text-green-400`;
 
-const PriceLabel = tw.span`text-sm text-gray-500 dark:text-gray-400`;
+const PriceLabel = tw.span`text-xs sm:text-sm text-gray-500 dark:text-gray-400`;
 
-const Description = tw.p`text-gray-700 dark:text-gray-300 leading-relaxed mb-6 text-base`;
+const Description = tw.p`text-gray-700 dark:text-gray-300 leading-relaxed mb-4 sm:mb-6 text-sm sm:text-base break-words`;
 
-const FeaturesTitle = tw.h3`text-xl font-bold text-gray-800 dark:text-gray-100 mb-4`;
+const FeaturesTitle = tw.h3`text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-3 sm:mb-4`;
 
-const FeaturesList = tw.ul`space-y-3 mb-8`;
+const FeaturesList = tw.ul`space-y-2 sm:space-y-3 mb-6 sm:mb-8`;
 
-const FeatureItem = tw.li`flex items-start gap-3 text-gray-700 dark:text-gray-300`;
+const FeatureItem = tw.li`flex items-start gap-2 sm:gap-3 text-gray-700 dark:text-gray-300 text-sm sm:text-base`;
 
-const FeatureIcon = tw.span`text-green-500 text-xl mt-0.5`;
+const FeatureIcon = tw.span`text-green-500 text-lg sm:text-xl mt-0.5 flex-shrink-0`;
 
-const ButtonRow = tw.div`flex gap-4 flex-wrap`;
+const ButtonRow = tw.div`flex flex-col sm:flex-row gap-3 sm:gap-4`;
 
 const Btn = styled.button`
   ${tw`px-8 py-3 rounded-xl font-semibold transition-all duration-300 flex items-center gap-2`}
@@ -148,12 +217,69 @@ const Btn = styled.button`
 `;
 
 const BuyBtn = styled(Btn)`
-  ${tw`bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg`}
+  background: rgba(59, 130, 246, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  color: white;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  
+  &:hover {
+    background: rgba(37, 99, 235, 0.95);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+  }
 `;
 
 const BackBtn = styled(Btn)`
-  ${tw`bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-600`}
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 0, 0, 0.2);
+  color: rgb(71, 85, 105);
+
+
+  .dark & {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgb(148, 163, 184);
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-4px);
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+
+    .dark & {
+      background: rgba(0, 0, 0, 0.35);
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    }
+  }
 `;
+
+const RentalButton = styled.button<{ isSelected: boolean }>`
+  ${tw`px-4 py-2 rounded-lg font-medium text-sm transition-all duration-300`}
+  background: ${({ isSelected }) => isSelected ? 'rgba(59, 130, 246, 0.9)' : 'rgba(255, 255, 255, 0.15)'};
+  backdrop-filter: blur(10px);
+  border: 1px solid ${({ isSelected }) => isSelected ? 'rgba(59, 130, 246, 0.3)' : 'rgba(255, 255, 255, 0.2)'};
+  color: ${({ isSelected }) => isSelected ? 'white' : 'rgb(71, 85, 105)'};
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+
+  .dark & {
+    background: ${({ isSelected }) => isSelected ? 'rgba(59, 130, 246, 0.9)' : 'rgba(0, 0, 0, 0.25)'};
+    border: 1px solid ${({ isSelected }) => isSelected ? 'rgba(59, 130, 246, 0.3)' : 'rgba(255, 255, 255, 0.1)'};
+    color: ${({ isSelected }) => isSelected ? 'white' : 'rgb(148, 163, 184)'};
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    background: ${({ isSelected }) => isSelected ? 'rgba(37, 99, 235, 0.95)' : 'rgba(255, 255, 255, 0.25)'};
+
+    .dark & {
+      background: ${({ isSelected }) => isSelected ? 'rgba(37, 99, 235, 0.95)' : 'rgba(0, 0, 0, 0.35)'};
+    }
+  }
+`;
+
+const RentalButtonsContainer = tw.div`flex gap-2 flex-wrap mb-4`;
 
 const NotFound = tw.div`text-center py-20`;
 
@@ -166,7 +292,9 @@ export default function DetailIndicator() {
   const navigate = useNavigate();
   const product = IndicatorProducts.find((p) => p.id === Number(id));
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
   const [isFlipping, setIsFlipping] = useState(false);
+  const [selectedRental, setSelectedRental] = useState<RentalOption | null>(null);
 
   const images = product?.images || [product?.image || ''];
 
@@ -180,23 +308,54 @@ export default function DetailIndicator() {
     }
   };
 
-  if (!product)
+  const handleMainImageClick = () => {
+    setIsZoomOpen(true);
+  };
+
+  const handleCloseZoom = () => {
+    setIsZoomOpen(false);
+  };
+
+  const handleZoomBackdropClick = (e: React.MouseEvent) => {
+    if (e.target === e.currentTarget) {
+      setIsZoomOpen(false);
+    }
+  };
+
+  const getWhatsAppLink = () => {
+    if (selectedRental) {
+      const message = `Hello, I'd like to rent ${product?.title} for ${selectedRental.months} months at a price of $${selectedRental.price}.`;
+      return `https://wa.me/6285161853108?text=${encodeURIComponent(message)}`;
+    } else {
+      const message = `Hello, I'm interested in ${product?.title} for $${product?.price}. Could you provide more information?`;
+      return `https://wa.me/+6285161853108?text=${encodeURIComponent(message)}`;
+    }
+  };
+
+  const handleRentalSelect = (rentalOption: RentalOption) => {
+    setSelectedRental(rentalOption);
+  };
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('id-ID').format(price);
+  };
+
+  
+
+  if (!product) {
     return (
       <PageWrapper>
-        <Background>
-          <ShapeEffect count={12} sizes={[30, 60]} />
-        </Background>
-        <Foreground>
-          <ShapeEffect count={12} sizes={[40, 80]} />
-        </Foreground>
-        <NotFound>
-          <NotFoundText>Product not found.</NotFoundText>
-          <NotFoundBtn onClick={() => navigate('/indicator')}>
-            ← Back to Indicator list
-          </NotFoundBtn>
-        </NotFound>
+        <Container>
+          <NotFound>
+            <NotFoundText>Product not found. ID: {id}</NotFoundText>
+            <NotFoundBtn onClick={() => navigate('/indicator')}>
+              ← Back to Indicator list
+            </NotFoundBtn>
+          </NotFound>
+        </Container>
       </PageWrapper>
     );
+  }
 
   return (
     <PageWrapper>
@@ -219,8 +378,12 @@ export default function DetailIndicator() {
         <ContentWrapper>
           <ImageSection>
             <ImageGallery>
-              <MainImageWrapper isActive={isFlipping}>
-                <MainImage src={images[selectedImageIndex]} alt={product.title} />
+              <MainImageWrapper onClick={handleMainImageClick} isActive={isFlipping}>
+                <MainImage 
+                  src={images[selectedImageIndex]} 
+                  alt={product.title}
+                />
+
               </MainImageWrapper>
               
               {images.length > 1 && (
@@ -237,6 +400,20 @@ export default function DetailIndicator() {
                 </ScrollContainer>
               )}
             </ImageGallery>
+            
+            {/* Zoom Modal */}
+            <ZoomModal 
+              isOpen={isZoomOpen} 
+              onClick={handleZoomBackdropClick}
+            >
+              <CloseButton onClick={handleCloseZoom}>
+                ×
+              </CloseButton>
+              <ZoomedImage 
+                src={images[selectedImageIndex]} 
+                alt={product.title}
+              />
+            </ZoomModal>
           </ImageSection>
 
           <InfoSection>
@@ -252,37 +429,46 @@ export default function DetailIndicator() {
 
             <FeaturesTitle>Key Features</FeaturesTitle>
             <FeaturesList>
-              <FeatureItem>
-                <FeatureIcon>✓</FeatureIcon>
-                <span>Accurate signal detection with minimal lag</span>
-              </FeatureItem>
-              <FeatureItem>
-                <FeatureIcon>✓</FeatureIcon>
-                <span>Customizable parameters for all trading styles</span>
-              </FeatureItem>
-              <FeatureItem>
-                <FeatureIcon>✓</FeatureIcon>
-                <span>Visual and audio alerts included</span>
-              </FeatureItem>
-              <FeatureItem>
-                <FeatureIcon>✓</FeatureIcon>
-                <span>Works on all timeframes and pairs</span>
-              </FeatureItem>
-              <FeatureItem>
-                <FeatureIcon>✓</FeatureIcon>
-                <span>Lifetime updates and support</span>
-              </FeatureItem>
-              <FeatureItem>
-                <FeatureIcon>✓</FeatureIcon>
-                <span>30-day money-back guarantee</span>
-              </FeatureItem>
+              {product.features.map((feature, index) => (
+                <FeatureItem key={index}>
+                  <FeatureIcon>✓</FeatureIcon>
+                  <span>{feature}</span>
+                </FeatureItem>
+              ))}
             </FeaturesList>
 
+            {/* Rental Options */}
+            {product.rentalOptions.length > 0 && (
+              <>
+                <div tw="mb-4">
+                  <h4 tw="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-3">Rental Options</h4>
+                  <RentalButtonsContainer>
+                    {product.rentalOptions.map((option, index) => (
+                      <RentalButton
+                        key={index}
+                        isSelected={selectedRental?.months === option.months}
+                        onClick={() => handleRentalSelect(option)}
+                      >
+                        {option.months} Month / ${option.price}
+                      </RentalButton>
+                    ))}
+                  </RentalButtonsContainer>
+                </div>
+              </>
+            )}
+
             <ButtonRow>
-              <BuyBtn>
-                <span>🛒</span>
-                <span>Buy Now</span>
-              </BuyBtn>
+              <a
+                href={getWhatsAppLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                tw="inline-block"
+              >
+                <BuyBtn>
+                  <span></span>
+                  <span>{selectedRental ? 'Rent' : 'Buy'}</span>
+                </BuyBtn>
+              </a>
               <BackBtn onClick={() => navigate('/indicator')}>
                 <span>←</span>
                 <span>Back</span>

@@ -30,40 +30,52 @@ const Wrapper = styled.div`
 
 const Header = tw.header`h-20 w-full`;
 
-const HeaderCenter = tw.div`mx-auto max-w-screen-lg flex px-8 items-center h-full text-slate-500 font-semibold`;
+const HeaderCenter = tw.div`mx-auto max-w-screen-lg flex px-4 sm:px-8 items-center h-full text-slate-400 dark:text-slate-300 font-semibold`;
 
 const TitleLink = styled(Link)`
-  ${tw`text-lg`}
+  ${tw`text-base sm:text-lg text-blue-600 dark:text-blue-400`}
 `;
 
-const Title = tw.span`mx-0.5 text-blue-500`;
+const Title = tw.span`mx-0.5 text-blue-600 dark:text-blue-400`;
 
-const Nav = tw.nav`grid gap-3 lg:gap-6 grid-flow-col ml-auto leading-5`;
+const Nav = tw.nav`grid gap-2 sm:gap-3 lg:gap-6 grid-flow-col ml-auto leading-5`;
 
-const navItemStyle = tw`opacity-60 cursor-pointer hover:(opacity-100 text-blue-500)`;
+const navItemStyle = tw`opacity-80 cursor-pointer hover:(opacity-100 text-blue-500 transform scale-105) transition-all duration-200`;
 
 const NavItem = styled.a`
   ${navItemStyle}
+  color: rgb(71, 85, 105);
+  
+  .dark & {
+    color: rgb(148, 163, 184);
+  }
 `;
 
 const NavLinkItem = styled(NavLink)`
   ${navItemStyle}
+  color: rgb(71, 85, 105);
+  
+  .dark & {
+    color: rgb(148, 163, 184);
+  }
 
   &.active {
-    ${tw`opacity-100 text-blue-500`}
+    ${tw`opacity-100 text-blue-500 transform scale-105`}
   }
 `;
 
-const Divider = tw.div`w-[1px] h-full bg-gray-200 dark:bg-gray-800`;
+const Divider = tw.div`w-[1px] h-full bg-gray-300 dark:bg-gray-600 opacity-50`;
 
-const Footer = tw.footer`
-  absolute bottom-4 left-0 
-  space-x-2 w-full
-  text-sm text-center text-slate-300
-  select-none
+const Footer = styled.footer`
+  ${tw`absolute bottom-4 left-0 space-x-2 w-full text-sm text-center select-none`}
+  color: rgb(100, 116, 139);
+  
+  .dark & {
+    color: rgb(148, 163, 184);
+  }
 `;
 
-const FooterCenter = tw.div`mx-auto max-w-screen-lg dark:text-slate-800`;
+const FooterCenter = tw.div`mx-auto max-w-screen-lg`;
 
 export default function Main() {
   const { t } = useTranslation();
@@ -134,10 +146,10 @@ export default function Main() {
 
         <Footer>
           <FooterCenter>
-            <a tw="hover:text-blue-500" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">
-              CC BY-NC-SA 4.0
-            </a>
-            <span tw="ml-2">2016-present © varHarrie</span>
+            {/* <a tw="hover:text-blue-500" href="https://dagangduit.com">
+              www.dagangduit.com
+            </a> */}
+            <span tw="ml-2">2025-present © Agus Pujianto</span>
           </FooterCenter>
         </Footer>
       </Wrapper>

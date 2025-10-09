@@ -1,17 +1,15 @@
-import { createContext, useEffect } from 'react';
-
-import useLocalStorage from './use-local-storage';
+import { createContext, useEffect, useState } from 'react';
 
 export const DarkModeValueContext = createContext(false);
 
 export default function useDarkMode() {
-  const [enabledValue, setEnabledValue] = useLocalStorage<boolean>('dark-mode-enabled');
-
-  const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-  const enabled = enabledValue ?? prefersDarkMode;
+  const [enabled, setEnabled] = useState<boolean>(() => {
+    const stored = localStorage.getItem('dark-mode-enabled');
+    return stored ? JSON.parse(stored) : true; // Default to dark mode
+  });
 
   useEffect(() => {
+    localStorage.setItem('dark-mode-enabled', JSON.stringify(enabled));
     if (enabled) {
       document.documentElement.classList.add('dark');
     } else {
@@ -19,5 +17,5 @@ export default function useDarkMode() {
     }
   }, [enabled]);
 
-  return [enabled, setEnabledValue] as const;
+  return [enabled, setEnabled] as const;
 }

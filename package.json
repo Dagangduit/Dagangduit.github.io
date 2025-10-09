@@ -1,5 +1,5 @@
 {
-  "name": "varharrie-blog",
+  "name": "agus-pujianto",
   "private": true,
   "version": "0.0.0",
   "babelMacros": {
@@ -12,8 +12,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
-  "homepage": "https://dagangduit.github.io",
-  "author": "Dagangduit",
+  "homepage": "https://aguspujianto.github.io",
+  "author": "aguspujianto",
   "license": "MIT",
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.0.26",

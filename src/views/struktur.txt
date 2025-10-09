@@ -1,8 +1,0 @@
-DetailEA.tsx
-DetailIndicator.tsx
-EA.tsx
-Home.tsx
-Indicator.tsx
-Main.tsx
-Projects.tsx
-struktur.txt

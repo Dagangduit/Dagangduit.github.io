@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Testing EA Images</title>
+</head>
+<body>
+<h1>Testing All EA Images</h1>
+
+<h2>EA Images:</h2>
+<img src="/images/ea/trendzone.png" alt="trendzone" style="width:200px; border:2px solid red;" onerror="this.style.border='2px solid red';" onload="this.style.border='2px solid green';" />
+<img src="/images/ea/scalpix-max.png" alt="scalpix-max" style="width:200px; border:2px solid red;" onerror="this.style.border='2px solid red';" onload="this.style.border='2px solid green';" />
+<img src="/images/ea/automatic-sltp.png" alt="automatic-sltp" style="width:200px; border:2px solid red;" onerror="this.style.border='2px solid red';" onload="this.style.border='2px solid green';" />
+<img src="/images/ea/snr-window.png" alt="snr-window" style="width:200px; border:2px solid red;" onerror="this.style.border='2px solid red';" onload="this.style.border='2px solid green';" />
+<img src="/images/ea/alert-bot.png" alt="alert-bot" style="width:200px; border:2px solid red;" onerror="this.style.border='2px solid red';" onload="this.style.border='2px solid green';" />
+<img src="/images/ea/auto-sltp.png" alt="auto-sltp" style="width:200px; border:2px solid red;" onerror="this.style.border='2px solid red';" onload="this.style.border='2px solid green';" />
+
+<h2>Indicator Images:</h2>
+<img src="/images/ea/atr-indicator.png" alt="atr-indicator" style="width:200px; border:2px solid red;" onerror="this.style.border='2px solid red';" onload="this.style.border='2px solid green';" />
+<img src="/images/ea/wallpaper.png" alt="wallpaper" style="width:200px; border:2px solid red;" onerror="this.style.border='2px solid red';" onload="this.style.border='2px solid green';" />
+<img src="/images/ea/1.png" alt="1" style="width:200px; border:2px solid red;" onerror="this.style.border='2px solid red';" onload="this.style.border='2px solid green';" />
+<img src="/images/ea/update.png" alt="update" style="width:200px; border:2px solid red;" onerror="this.style.border='2px solid red';" onload="this.style.border='2px solid green';" />
+
+<p><strong>Green border = Image loads successfully</strong><br>
+<strong>Red border = Image not found (404)</strong></p>
+
+<script>
+    console.log('Testing image paths...');
+    // Check all images on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        const images = document.querySelectorAll('img');
+        images.forEach(img => {
+            img.addEventListener('error', function() {
+                console.log('Image failed to load:', img.src);
+            });
+            img.addEventListener('load', function() {
+                console.log('Image loaded successfully:', img.src);
+            });
+        });
+    });
+</script>
+</body>
+</html>
