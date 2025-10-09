@@ -1,0 +1,35 @@
+# 1. Cek status dan perubahan apa saja
+npm run build
+
+# 2. Add perubahan Anda
+git add .
+git commit -m "update produk [nama produk]"
+
+# Pull dulu
+git pull origin gh-pages
+
+# Push lagi
+git push origin gh-pages
+
+#Paksa Push
+git push origin gh-pages --force
+
+# 3. Commit perubahan
+# Hard refresh
+Ctrl + F5
+
+# Atau cache buster
+https://dagangduit.github.io?v=123456789
+
+
+Cara Update
+# 1. Edit produk dulu (manual)
+# 2. Build
+npm run build
+
+# 3. Git operations
+git add .
+git commit -m "update produk indicator/EA"
+git push origin gh-pages
+
+# 4. Done! Website akan terupdate otomatis
