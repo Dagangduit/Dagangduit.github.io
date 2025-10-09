@@ -18,7 +18,7 @@ export type Product = {
 export const IndicatorProducts: Product[] = [
   {
     id: 1,
-    title: 'Trendline Master',
+    title: 'Trendline Master 22',
     description: 'Indicator for automatic trendline detection with high accuracy and real-time alerts.',
     price: 39,
     image: '/images/indicator/1.png',
